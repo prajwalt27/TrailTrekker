@@ -15,17 +15,20 @@ var indexRoutes = require("./routes/index");
 var methodOverride = require("method-override");
 var flash = require("connect-flash");
 
-// mongosh "mongodb+srv://cluster0.mn71b.mongodb.net/myFirstDatabase" --username admin
-
-
-mongoose.connect("mongodb+srv://admin:admin@cluster0.mn71b.mongodb.net/final?retryWrites=true&w=majority", {
-    useNewUrlParser: true,
-    useCreateIndex: true
-}).then(() => {
+mongoose
+  .connect(
+    "mongodb+srv://prajwalrt27:praju123@cluster1.uqohwph.mongodb.net/?retryWrites=true&w=majority",
+    {
+      useNewUrlParser: true,
+      useCreateIndex: true,
+    }
+  )
+  .then(() => {
     console.log("connetcted to db");
-}).catch(err => {
+  })
+  .catch((err) => {
     console.log("ERROR");
-});
+  });
 //seedDB();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -39,11 +42,13 @@ app.use(flash());
 //==============================
 
 var port = process.env.PORT || 3000;
-app.use(require("express-session")({
+app.use(
+  require("express-session")({
     secret: "anything",
     resave: false,
-    saveUninitialized: false
-}));
+    saveUninitialized: false,
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -51,20 +56,17 @@ passport.use(new LocalStratagy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-
 app.use(function (req, res, next) {
-    res.locals.currentUser = req.user;
-    res.locals.error = req.flash("error");
-    res.locals.success = req.flash("success");
-    return next();
+  res.locals.currentUser = req.user;
+  res.locals.error = req.flash("error");
+  res.locals.success = req.flash("success");
+  return next();
 });
-
-
 
 app.use(indexRoutes);
 app.use(campgroundRoutes);
 app.use(commentRoutes);
 
 app.listen(port, function () {
-    console.log("Yelp server is listening.....");
+  console.log("Yelp server is listening.....");
 });

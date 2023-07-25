@@ -14,15 +14,14 @@ var campgroundRoutes = require("./routes/campgrounds");
 var indexRoutes = require("./routes/index");
 var methodOverride = require("method-override");
 var flash = require("connect-flash");
+require("dotenv").config();
 
 mongoose
-  .connect(
-    "mongodb+srv://prajwalrt27:praju123@cluster1.uqohwph.mongodb.net/?retryWrites=true&w=majority",
-    {
-      useNewUrlParser: true,
-      useCreateIndex: true,
-    }
-  )
+  .connect(process.env.DATABASE_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
   .then(() => {
     console.log("connetcted to db");
   })
@@ -35,11 +34,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
-//To send currentUser in all routes
-
-//==============================
-// PASSPORT CONFIGURATION
-//==============================
 
 var port = process.env.PORT || 3000;
 app.use(
@@ -68,5 +62,5 @@ app.use(campgroundRoutes);
 app.use(commentRoutes);
 
 app.listen(port, function () {
-  console.log("Yelp server is listening.....");
+  console.log("server is listening.....");
 });

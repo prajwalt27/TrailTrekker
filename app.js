@@ -38,7 +38,7 @@ app.use(flash());
 var port = process.env.PORT || 3000;
 app.use(
   require("express-session")({
-    secret: "anything",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
   })
